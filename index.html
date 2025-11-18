@@ -2,69 +2,36 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Minha Página Escura</title>
+    <title>Carinha Sorrindo</title>
     <style>
         body {
             margin: 0;
             background-color: #121212; /* fundo escuro */
-            color: #ffffff; /* texto branco */
+            color: #ffffff;
             font-family: Arial, Helvetica, sans-serif;
+            height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: flex-end; /* para o Mario ficar na base */
-            height: 100vh;
+            align-items: center;
+            position: relative;
             overflow: hidden;
         }
 
-        .frase {
-            position: absolute;
-            top: 50px;
-            width: 100%;
-            text-align: center;
-            font-size: 2rem;
+        .smile {
+            font-size: 10rem; /* tamanho grande do carinha */
         }
 
-        #mario {
-            width: 50px;
-            height: 50px;
-            background-color: red;
-            position: relative;
-            bottom: 0;
-            transition: bottom 0.3s;
-            border-radius: 10%;
-            margin-bottom: 20px;
+        .texto-direita {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            text-align: right;
         }
     </style>
 </head>
 <body>
-    <div class="frase">
-       rebel ooo<br>0109
-    </div>
-
-    <div id="mario"></div>
-
-    <script>
-        const mario = document.getElementById('mario');
-
-        function pular() {
-            if (!mario.classList.contains('jump')) {
-                mario.classList.add('jump');
-                mario.style.bottom = '150px';
-
-                setTimeout(() => {
-                    mario.style.bottom = '0';
-                    mario.classList.remove('jump');
-                }, 500); // tempo do pulo
-            }
-        }
-
-        // Pula quando apertar barra de espaço
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                pular();
-            }
-        });
-    </script>
+    <div class="smile">:)</div>
+    <div class="texto-direita">rebel ooo<br>0109</div>
 </body>
 </html>
-
