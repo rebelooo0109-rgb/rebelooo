@@ -25,9 +25,50 @@
     <div class="frase">
        rebel ooo<br>
         0109
+        <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Mario Pulando</title>
+  <style>
+    body {
+      background-color: #cceeff;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #mario {
+      width: 50px;
+      height: 50px;
+      background-color: red;
+      position: relative;
+      bottom: 0;
+      transition: bottom 0.3s;
+      border-radius: 10%;
+    }
+  </style>
+</head>
+<body>
+  <div id="mario"></div>
+
+  <script>
+    const mario = document.getElementById('mario');
+
+    function pular() {
+      if (!mario.classList.contains('jump')) {
+        mario.classList.add('jump');
+        mario.style.bottom = '150px';
+
+        setTimeout(() => {
+          mario.style
     </div>
 </body>
 </html>
+
 
 
 
