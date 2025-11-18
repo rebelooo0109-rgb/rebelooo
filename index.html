@@ -12,18 +12,16 @@
             height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: flex-end; /* começa na base da tela */
-            overflow: hidden;
+            align-items: center; /* carinha no meio */
             position: relative;
+            overflow: hidden;
         }
 
         #carinha {
-            font-size: 8rem; /* carinha grande */
-            position: relative;
-            bottom: 0;
-            transition: bottom 0.3s; /* animação suave do pulo */
+            font-size: 10rem; /* carinha grande */
             cursor: pointer;
             user-select: none;
+            transition: transform 0.2s; /* efeito de zoom */
         }
 
         .texto-direita {
@@ -41,27 +39,4 @@
 
     <script>
         const carinha = document.getElementById('carinha');
-
-        function pular() {
-            if (!carinha.classList.contains('jump')) {
-                carinha.classList.add('jump');
-                carinha.style.bottom = '150px'; // sobe 150px
-
-                setTimeout(() => {
-                    carinha.style.bottom = '0'; // volta para baixo
-                    carinha.classList.remove('jump');
-                }, 400); // tempo do pulo
-            }
-        }
-
-        // Pular com barra de espaço
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                e.preventDefault(); // evita scroll da página
-                pular();
-            }
-        });
-
-        // Pular ao clicar ou tocar
-
-    
+        let
