@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>rebel ooo</title> <!-- <- Aqui é o nome da aba -->
+    <title>rebel ooo</title> <!-- <-- só isso mudou -->
     <style>
         body {
             margin: 0;
@@ -12,16 +12,16 @@
             height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: flex-end;
+            align-items: flex-end; /* começa na base da tela */
             overflow: hidden;
             position: relative;
         }
 
         #carinha {
-            font-size: 8rem;
+            font-size: 8rem; /* tamanho grande */
             position: relative;
             bottom: 0;
-            transition: bottom 0.3s;
+            transition: bottom 0.3s; /* animação suave do pulo */
             cursor: pointer;
             user-select: none;
         }
@@ -31,4 +31,40 @@
             top: 20px;
             right: 20px;
             font-size: 1.5rem;
-            text-align: r
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div id="carinha">:)</div>
+    <div class="texto-direita">rebel ooo<br>0109</div>
+
+    <script>
+        const carinha = document.getElementById('carinha');
+
+        function pular() {
+            if (!carinha.classList.contains('jump')) {
+                carinha.classList.add('jump');
+                carinha.style.bottom = '150px'; // sobe 150px
+
+                setTimeout(() => {
+                    carinha.style.bottom = '0'; // volta para baixo
+                    carinha.classList.remove('jump');
+                }, 400); // tempo do pulo
+            }
+        }
+
+        // Pular com barra de espaço
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault(); // evita scroll da página
+                pular();
+            }
+        });
+
+        // Pular ao clicar ou tocar
+        carinha.addEventListener('click', pular);
+        carinha.addEventListener('touchstart', pular);
+    </script>
+</body>
+</html>
