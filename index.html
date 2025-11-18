@@ -24,6 +24,7 @@
         user-select: none;
         transition: transform 0.3s ease, opacity 0.3s ease;
         opacity: 1;
+        z-index: 2;
     }
 
     .texto-direita {
@@ -36,7 +37,7 @@
 
     .mensagem-baixo {
         position: absolute;
-        bottom: 20px;
+        bottom: 10%; /* sobe um pouco para não ficar fora da tela no celular */
         width: 100%;
         text-align: center;
         font-size: 1.2rem;
@@ -44,6 +45,7 @@
         opacity: 0;
         transition: opacity 0.3s ease;
         pointer-events: none;
+        z-index: 1;
     }
     .mensagem-baixo.show {
         opacity: 1;
@@ -61,8 +63,9 @@
         color: #ddd;
         opacity: 0;
         transition: opacity 0.6s ease;
-        white-space: pre-line; /* respeita quebras de linha */
-        max-width: 80vw;
+        white-space: pre-line;
+        max-width: 90vw; /* mais responsivo para telas pequenas */
+        z-index: 3;
     }
     .poema-centro.show {
         opacity: 1;
@@ -88,7 +91,6 @@ const carinha = document.getElementById('carinha');
 const mensagem = document.getElementById('mensagem');
 const poema = document.getElementById('poema');
 
-// Estados de animação compostos
 let piscando = false;
 let pulando = false;
 let escala = 1;
@@ -125,12 +127,11 @@ function pular() {
     }, 400);
 }
 
-// Inatividade por relógio
+// Inatividade
 let lastActivity = Date.now();
 let messageShown = false;
 let poemShown = false;
 
-// Mostrar/ocultar elementos
 function mostrarMensagem() {
     mensagem.classList.add('show');
     messageShown = true;
@@ -149,30 +150,30 @@ function esconderPoema() {
     carinha.style.opacity = 1;
     poemShown = false;
 }
-
-// Reseta inatividade
 function resetarInatividade() {
     lastActivity = Date.now();
     if (messageShown) esconderMensagem();
     if (poemShown) esconderPoema();
 }
 
-// Interação padrão
+// Interação
 function interagir() {
     piscar();
     pular();
     resetarInatividade();
 }
 
-// Eventos de interação
+// Eventos PC + celular
 carinha.addEventListener('click', interagir);
-carinha.addEventListener('touchstart', interagir, { passive: true });
+carinha.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // garante que o toque seja capturado
+    interagir();
+}, { passive: false });
 document.addEventListener('keydown', (e) => {
     if (e.code === 'Space' || e.code === 'Enter') {
         e.preventDefault();
         interagir();
     } else {
-        // Qualquer tecla conta como atividade
         resetarInatividade();
     }
 });
@@ -183,17 +184,15 @@ document.addEventListener('touchmove', resetarInatividade, { passive: true });
 setInterval(() => {
     const elapsed = Date.now() - lastActivity;
 
-    // 10s: pulo + mensagem
     if (elapsed >= 10000 && !messageShown && !poemShown) {
         pular();
         mostrarMensagem();
     }
-    // 25s: esconde carinha e mensagem, mostra poema
     if (elapsed >= 25000 && !poemShown) {
         esconderMensagem();
         mostrarPoema();
     }
-}, 250); // checagem 4x por segundo
+}, 250);
 
 // Inicializa
 aplicarTransform();
