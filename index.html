@@ -22,7 +22,8 @@
         position: relative;
         cursor: pointer;
         user-select: none;
-        transition: transform 0.3s ease;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        opacity: 1;
     }
 
     .texto-direita {
@@ -50,13 +51,18 @@
 
     .poema-centro {
         position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) rotate(-8deg);
         text-align: center;
-        font-size: 1.2rem;
+        font-size: clamp(1rem, 3vw, 1.4rem);
         font-style: italic;
-        transform: rotate(-5deg);
+        line-height: 1.6;
+        color: #ddd;
         opacity: 0;
-        transition: opacity 1s ease;
+        transition: opacity 0.6s ease;
         white-space: pre-line; /* respeita quebras de linha */
+        max-width: 80vw;
     }
     .poema-centro.show {
         opacity: 1;
@@ -82,11 +88,11 @@ const carinha = document.getElementById('carinha');
 const mensagem = document.getElementById('mensagem');
 const poema = document.getElementById('poema');
 
+// Estados de animação compostos
 let piscando = false;
 let pulando = false;
 let escala = 1;
 let deslocY = 0;
-
 function aplicarTransform() {
     carinha.style.transform = `translateY(${deslocY}px) scale(${escala})`;
 }
@@ -119,43 +125,46 @@ function pular() {
     }, 400);
 }
 
-// Inatividade
-let timeout10s, timeout25s;
+// Inatividade por relógio
+let lastActivity = Date.now();
+let messageShown = false;
+let poemShown = false;
 
+// Mostrar/ocultar elementos
 function mostrarMensagem() {
     mensagem.classList.add('show');
+    messageShown = true;
 }
 function esconderMensagem() {
     mensagem.classList.remove('show');
+    messageShown = false;
 }
 function mostrarPoema() {
-    carinha.style.display = "none";
-    esconderMensagem();
     poema.classList.add('show');
+    carinha.style.opacity = 0;
+    poemShown = true;
 }
-function resetarInatividade() {
-    clearTimeout(timeout10s);
-    clearTimeout(timeout25s);
-    esconderMensagem();
+function esconderPoema() {
     poema.classList.remove('show');
-    carinha.style.display = "block";
-
-    timeout10s = setTimeout(() => {
-        pular();
-        mostrarMensagem();
-    }, 10000); // 10 segundos
-
-    timeout25s = setTimeout(() => {
-        mostrarPoema();
-    }, 25000); // 25 segundos
+    carinha.style.opacity = 1;
+    poemShown = false;
 }
 
-// Interação
+// Reseta inatividade
+function resetarInatividade() {
+    lastActivity = Date.now();
+    if (messageShown) esconderMensagem();
+    if (poemShown) esconderPoema();
+}
+
+// Interação padrão
 function interagir() {
     piscar();
     pular();
     resetarInatividade();
 }
+
+// Eventos de interação
 carinha.addEventListener('click', interagir);
 carinha.addEventListener('touchstart', interagir, { passive: true });
 document.addEventListener('keydown', (e) => {
@@ -163,11 +172,28 @@ document.addEventListener('keydown', (e) => {
         e.preventDefault();
         interagir();
     } else {
+        // Qualquer tecla conta como atividade
         resetarInatividade();
     }
 });
 document.addEventListener('mousemove', resetarInatividade);
 document.addEventListener('touchmove', resetarInatividade, { passive: true });
+
+// Verificador de inatividade
+setInterval(() => {
+    const elapsed = Date.now() - lastActivity;
+
+    // 10s: pulo + mensagem
+    if (elapsed >= 10000 && !messageShown && !poemShown) {
+        pular();
+        mostrarMensagem();
+    }
+    // 25s: esconde carinha e mensagem, mostra poema
+    if (elapsed >= 25000 && !poemShown) {
+        esconderMensagem();
+        mostrarPoema();
+    }
+}, 250); // checagem 4x por segundo
 
 // Inicializa
 aplicarTransform();
