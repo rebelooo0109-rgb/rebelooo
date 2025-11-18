@@ -47,28 +47,51 @@
     .mensagem-baixo.show {
         opacity: 1;
     }
+
+    .poema-centro {
+        position: absolute;
+        text-align: center;
+        font-size: 1.2rem;
+        font-style: italic;
+        transform: rotate(-5deg);
+        opacity: 0;
+        transition: opacity 1s ease;
+        white-space: pre-line; /* respeita quebras de linha */
+    }
+    .poema-centro.show {
+        opacity: 1;
+    }
 </style>
 </head>
 <body>
 <div id="carinha" role="button" tabindex="0">:)</div>
 <div class="texto-direita">rebel ooo<br>0109</div>
 <div class="mensagem-baixo" id="mensagem">dclp, vc ainda está ai?</div>
+<div class="poema-centro" id="poema">
+da mi basia mille, deinde centum,
+dein mille altera, dein secunda centum,
+deinde usque altera mille, deinde centum.
+dein, cum milia multa fecerimus,
+conturbabimus illa, ne sciamus,
+aut nequis malus invidere possit,
+cum tantum sciat esse basiorum.
+</div>
 
 <script>
 const carinha = document.getElementById('carinha');
 const mensagem = document.getElementById('mensagem');
+const poema = document.getElementById('poema');
 
 let piscando = false;
 let pulando = false;
-
-// Estado de transform composto
 let escala = 1;
 let deslocY = 0;
+
 function aplicarTransform() {
     carinha.style.transform = `translateY(${deslocY}px) scale(${escala})`;
 }
 
-// Piscadinha (compõe com o pulo)
+// Piscadinha
 function piscar() {
     if (piscando) return;
     piscando = true;
@@ -83,7 +106,7 @@ function piscar() {
     }, 500);
 }
 
-// Pulo (compõe com a piscadinha)
+// Pulo
 function pular() {
     if (pulando) return;
     pulando = true;
@@ -96,24 +119,38 @@ function pular() {
     }, 400);
 }
 
-// Inatividade: mostra mensagem e faz um pulo após 10s
-let timeoutInatividade;
+// Inatividade
+let timeout10s, timeout25s;
+
 function mostrarMensagem() {
     mensagem.classList.add('show');
 }
 function esconderMensagem() {
     mensagem.classList.remove('show');
 }
-function resetarInatividade() {
-    clearTimeout(timeoutInatividade);
+function mostrarPoema() {
+    carinha.style.display = "none";
     esconderMensagem();
-    timeoutInatividade = setTimeout(() => {
+    poema.classList.add('show');
+}
+function resetarInatividade() {
+    clearTimeout(timeout10s);
+    clearTimeout(timeout25s);
+    esconderMensagem();
+    poema.classList.remove('show');
+    carinha.style.display = "block";
+
+    timeout10s = setTimeout(() => {
         pular();
         mostrarMensagem();
     }, 10000); // 10 segundos
+
+    timeout25s = setTimeout(() => {
+        mostrarPoema();
+    }, 25000); // 25 segundos
 }
 
-// Eventos de interação (reiniciam inatividade)
+// Interação
 function interagir() {
     piscar();
     pular();
@@ -129,9 +166,12 @@ document.addEventListener('keydown', (e) => {
         resetarInatividade();
     }
 });
-// Considera movimento do mouse e toque como atividade
 document.addEventListener('mousemove', resetarInatividade);
 document.addEventListener('touchmove', resetarInatividade, { passive: true });
 
 // Inicializa
-aplicarTransform
+aplicarTransform();
+resetarInatividade();
+</script>
+</body>
+</html>
