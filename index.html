@@ -18,7 +18,7 @@
         }
 
         .smile {
-            font-size: 10rem; /* tamanho grande do carinha */
+            font-size: 10rem; /* carinha grande */
             cursor: pointer;
             user-select: none;
             transition: transform 0.2s;
@@ -44,4 +44,27 @@
         function piscar() {
             if (!piscando) {
                 piscando = true;
-                smile.textContent = ";)"; // muda a carinha
+                smile.textContent = ";)"; // carinha piscando
+                smile.style.transform = "scale(1.2)"; // zoom divertido
+
+                setTimeout(() => {
+                    smile.textContent = ":)"; // volta ao normal
+                    smile.style.transform = "scale(1)";
+                    piscando = false;
+                }, 500);
+            }
+        }
+
+        // Piscadinha com barra de espaço
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                piscar();
+            }
+        });
+
+        // Piscadinha com clique ou toque
+        smile.addEventListener('click', piscar);
+        smile.addEventListener('touchstart', piscar);
+    </script>
+</body>
+</html>
