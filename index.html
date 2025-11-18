@@ -1,70 +1,95 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Carinha Pulando</title>
-    <style>
-        body {
-            margin: 0;
-            background-color: #121212;
-            color: #ffffff;
-            font-family: Arial, Helvetica, sans-serif;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end; /* começa na base da tela */
-            overflow: hidden;
-            position: relative;
-        }
+<meta charset="UTF-8">
+<title>rebel ooo</title>
+<style>
+    body {
+        margin: 0;
+        background-color: #121212;
+        color: #ffffff;
+        font-family: Arial, Helvetica, sans-serif;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center; /* carinha no centro */
+        position: relative;
+        overflow: hidden;
+    }
 
-        #carinha {
-            font-size: 8rem; /* tamanho grande */
-            position: relative;
-            bottom: 0;
-            transition: bottom 0.3s; /* animação suave do pulo */
-            cursor: pointer;
-            user-select: none;
-        }
+    #carinha {
+        font-size: 10rem;
+        position: relative;
+        bottom: 0;
+        cursor: pointer;
+        user-select: none;
+        transition: bottom 0.3s, transform 0.2s;
+    }
 
-        .texto-direita {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 1.5rem;
-            text-align: right;
-        }
-    </style>
+    .texto-direita {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 1.5rem;
+        text-align: right;
+    }
+</style>
 </head>
 <body>
-    <div id="carinha">:)</div>
-    <div class="texto-direita">rebel ooo<br>0109</div>
+<div id="carinha">:)</div>
+<div class="texto-direita">rebel ooo<br>0109</div>
 
-    <script>
-        const carinha = document.getElementById('carinha');
+<script>
+const carinha = document.getElementById('carinha');
+let piscando = false;
+let pulando = false;
 
-        function pular() {
-            if (!carinha.classList.contains('jump')) {
-                carinha.classList.add('jump');
-                carinha.style.bottom = '150px'; // sobe 150px
+// Piscadinha
+function piscar() {
+    if (!piscando) {
+        piscando = true;
+        carinha.textContent = ";)";
+        carinha.style.transform = "scale(1.2)";
+        setTimeout(() => {
+            carinha.textContent = ":)";
+            carinha.style.transform = "scale(1)";
+            piscando = false;
+        }, 500);
+    }
+}
 
-                setTimeout(() => {
-                    carinha.style.bottom = '0'; // volta para baixo
-                    carinha.classList.remove('jump');
-                }, 400); // tempo do pulo
-            }
-        }
+// Pulo
+function pular() {
+    if (!pulando) {
+        pulando = true;
+        carinha.style.bottom = '150px';
+        setTimeout(() => {
+            carinha.style.bottom = '0';
+            pulando = false;
+        }, 400);
+    }
+}
 
-        // Pular com barra de espaço
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                e.preventDefault(); // evita scroll da página
-                pular();
-            }
-        });
+// Ação ao clicar, tocar ou apertar espaço
+carinha.addEventListener('click', () => { piscar(); pular(); });
+carinha.addEventListener('touchstart', () => { piscar(); pular(); });
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+        e.preventDefault();
+        piscar();
+        pular();
+    }
+});
 
-        // Pular ao clicar ou tocar
-        carinha.addEventListener('click', pular);
-        carinha.addEventListener('touchstart', pular);
-    </script>
+// Pulinhos automáticos aleatórios
+function pulinhoAleatorio() {
+    const delay = Math.random() * 4000 + 1000; // 1 a 5 segundos
+    setTimeout(() => {
+        pular();
+        pulinhoAleatorio();
+    }, delay);
+}
+pulinhoAleatorio();
+</script>
 </body>
 </html>
