@@ -32,16 +32,29 @@
         font-size: 1.5rem;
         text-align: right;
     }
+
+    .mensagem-baixo {
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+        text-align: center;
+        font-size: 1.2rem;
+        color: #aaa;
+        display: none; /* começa escondida */
+    }
 </style>
 </head>
 <body>
 <div id="carinha" role="button" tabindex="0">:)</div>
 <div class="texto-direita">rebel ooo<br>0109</div>
+<div class="mensagem-baixo" id="mensagem">dclp, vc ainda está ai?</div>
 
 <script>
 const carinha = document.getElementById('carinha');
+const mensagem = document.getElementById('mensagem');
 let piscando = false;
 let pulando = false;
+let timeoutInatividade;
 
 // Piscadinha
 function piscar() {
@@ -61,4 +74,38 @@ function piscar() {
 function pular() {
     if (!pulando) {
         pulando = true;
-        carinha.style.transform
+        carinha.style.transform = "translateY(-150px)";
+        setTimeout(() => {
+            carinha.style.transform = "translateY(0)";
+            pulando = false;
+        }, 400);
+    }
+}
+
+// Resetar inatividade
+function resetarInatividade() {
+    clearTimeout(timeoutInatividade);
+    mensagem.style.display = "none"; // esconde mensagem se usuário interagir
+    timeoutInatividade = setTimeout(() => {
+        pular();
+        mensagem.style.display = "block"; // mostra mensagem após 10s sem interação
+    }, 10000); // 10 segundos
+}
+
+// Eventos de interação
+carinha.addEventListener('click', () => { piscar(); pular(); resetarInatividade(); });
+carinha.addEventListener('touchstart', () => { piscar(); pular(); resetarInatividade(); });
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' || e.code === 'Enter') {
+        e.preventDefault();
+        piscar();
+        pular();
+        resetarInatividade();
+    }
+});
+
+// Inicia contador de inatividade
+resetarInatividade();
+</script>
+</body>
+</html>
