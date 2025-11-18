@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Carinha Interativa</title>
+    <title>Carinha Piscando</title>
     <style>
         body {
             margin: 0;
@@ -19,9 +19,9 @@
 
         .smile {
             font-size: 10rem; /* tamanho grande do carinha */
-            position: relative;
-            transition: transform 0.3s;
-            cursor: pointer; /* indica que é clicável no celular */
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s;
         }
 
         .texto-direita {
@@ -39,24 +39,9 @@
 
     <script>
         const smile = document.getElementById('smile');
+        let piscando = false;
 
-        function pular() {
-            // Move para cima
-            smile.style.transform = 'translateY(-150px)';
-
-            // Volta para baixo
-            setTimeout(() => {
-                smile.style.transform = 'translateY(0)';
-            }, 500); // tempo do pulo
-        }
-
-        // Pula quando apertar a barra de espaço
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                pular();
-            }
-        });
-
-        // Pula quando tocar/clicar no carinha (celular ou PC)
-        smile.addEventListener('click', pular);
-        smile.addEventListen
+        function piscar() {
+            if (!piscando) {
+                piscando = true;
+                smile.textContent = ";)"; // muda a carinha
