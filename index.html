@@ -11,64 +11,60 @@
             font-family: Arial, Helvetica, sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-end; /* para o Mario ficar na base */
             height: 100vh;
+            overflow: hidden;
         }
 
         .frase {
-            font-size: 2rem;
+            position: absolute;
+            top: 50px;
+            width: 100%;
             text-align: center;
+            font-size: 2rem;
+        }
+
+        #mario {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            position: relative;
+            bottom: 0;
+            transition: bottom 0.3s;
+            border-radius: 10%;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
     <div class="frase">
-       rebel ooo<br>
-        0109
-        <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Mario Pulando</title>
-  <style>
-    body {
-      background-color: #cceeff;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      height: 100vh;
-      margin: 0;
-      overflow: hidden;
-    }
-
-    #mario {
-      width: 50px;
-      height: 50px;
-      background-color: red;
-      position: relative;
-      bottom: 0;
-      transition: bottom 0.3s;
-      border-radius: 10%;
-    }
-  </style>
-</head>
-<body>
-  <div id="mario"></div>
-
-  <script>
-    const mario = document.getElementById('mario');
-
-    function pular() {
-      if (!mario.classList.contains('jump')) {
-        mario.classList.add('jump');
-        mario.style.bottom = '150px';
-
-        setTimeout(() => {
-          mario.style
+       rebel ooo<br>0109
     </div>
+
+    <div id="mario"></div>
+
+    <script>
+        const mario = document.getElementById('mario');
+
+        function pular() {
+            if (!mario.classList.contains('jump')) {
+                mario.classList.add('jump');
+                mario.style.bottom = '150px';
+
+                setTimeout(() => {
+                    mario.style.bottom = '0';
+                    mario.classList.remove('jump');
+                }, 500); // tempo do pulo
+            }
+        }
+
+        // Pula quando apertar barra de espaço
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                pular();
+            }
+        });
+    </script>
 </body>
 </html>
-
-
-
 
