@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Carinha Sorrindo</title>
+    <title>Carinha Interativa</title>
     <style>
         body {
             margin: 0;
@@ -18,7 +18,10 @@
         }
 
         .smile {
-            font-size: 10rem; /* carinha grande */
+            font-size: 10rem; /* tamanho grande do carinha */
+            position: relative;
+            transition: transform 0.3s;
+            cursor: pointer; /* indica que é clicável no celular */
         }
 
         .texto-direita {
@@ -31,7 +34,29 @@
     </style>
 </head>
 <body>
-    <div class="smile">:)</div>
+    <div class="smile" id="smile">:)</div>
     <div class="texto-direita">rebel ooo<br>0109</div>
-</body>
-</html>
+
+    <script>
+        const smile = document.getElementById('smile');
+
+        function pular() {
+            // Move para cima
+            smile.style.transform = 'translateY(-150px)';
+
+            // Volta para baixo
+            setTimeout(() => {
+                smile.style.transform = 'translateY(0)';
+            }, 500); // tempo do pulo
+        }
+
+        // Pula quando apertar a barra de espaço
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                pular();
+            }
+        });
+
+        // Pula quando tocar/clicar no carinha (celular ou PC)
+        smile.addEventListener('click', pular);
+        smile.addEventListen
