@@ -12,18 +12,17 @@
         height: 100vh;
         display: flex;
         justify-content: center;
-        align-items: center; /* carinha no centro */
+        align-items: center;
         position: relative;
         overflow: hidden;
     }
 
     #carinha {
-        font-size: 10rem;
+        font-size: clamp(5rem, 15vw, 10rem); /* responsivo */
         position: relative;
-        bottom: 0;
         cursor: pointer;
         user-select: none;
-        transition: bottom 0.3s, transform 0.2s;
+        transition: transform 0.3s ease;
     }
 
     .texto-direita {
@@ -36,7 +35,7 @@
 </style>
 </head>
 <body>
-<div id="carinha">:)</div>
+<div id="carinha" role="button" tabindex="0">:)</div>
 <div class="texto-direita">rebel ooo<br>0109</div>
 
 <script>
@@ -62,34 +61,4 @@ function piscar() {
 function pular() {
     if (!pulando) {
         pulando = true;
-        carinha.style.bottom = '150px';
-        setTimeout(() => {
-            carinha.style.bottom = '0';
-            pulando = false;
-        }, 400);
-    }
-}
-
-// Ação ao clicar, tocar ou apertar espaço
-carinha.addEventListener('click', () => { piscar(); pular(); });
-carinha.addEventListener('touchstart', () => { piscar(); pular(); });
-document.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') {
-        e.preventDefault();
-        piscar();
-        pular();
-    }
-});
-
-// Pulinhos automáticos aleatórios
-function pulinhoAleatorio() {
-    const delay = Math.random() * 4000 + 1000; // 1 a 5 segundos
-    setTimeout(() => {
-        pular();
-        pulinhoAleatorio();
-    }, delay);
-}
-pulinhoAleatorio();
-</script>
-</body>
-</html>
+        carinha.style.transform
