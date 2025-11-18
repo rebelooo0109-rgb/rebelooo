@@ -18,7 +18,7 @@
     }
 
     #carinha {
-        font-size: clamp(5rem, 15vw, 10rem); /* responsivo */
+        font-size: clamp(5rem, 15vw, 10rem);
         position: relative;
         cursor: pointer;
         user-select: none;
@@ -40,7 +40,12 @@
         text-align: center;
         font-size: 1.2rem;
         color: #aaa;
-        display: none; /* começa escondida */
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    .mensagem-baixo.show {
+        opacity: 1;
     }
 </style>
 </head>
@@ -52,60 +57,81 @@
 <script>
 const carinha = document.getElementById('carinha');
 const mensagem = document.getElementById('mensagem');
+
 let piscando = false;
 let pulando = false;
-let timeoutInatividade;
 
-// Piscadinha
+// Estado de transform composto
+let escala = 1;
+let deslocY = 0;
+function aplicarTransform() {
+    carinha.style.transform = `translateY(${deslocY}px) scale(${escala})`;
+}
+
+// Piscadinha (compõe com o pulo)
 function piscar() {
-    if (!piscando) {
-        piscando = true;
-        carinha.textContent = ";)";
-        carinha.style.transform = "scale(1.2)";
-        setTimeout(() => {
-            carinha.textContent = ":)";
-            carinha.style.transform = "scale(1)";
-            piscando = false;
-        }, 500);
-    }
+    if (piscando) return;
+    piscando = true;
+    carinha.textContent = ";)";
+    escala = 1.2;
+    aplicarTransform();
+    setTimeout(() => {
+        carinha.textContent = ":)";
+        escala = 1;
+        aplicarTransform();
+        piscando = false;
+    }, 500);
 }
 
-// Pulo
+// Pulo (compõe com a piscadinha)
 function pular() {
-    if (!pulando) {
-        pulando = true;
-        carinha.style.transform = "translateY(-150px)";
-        setTimeout(() => {
-            carinha.style.transform = "translateY(0)";
-            pulando = false;
-        }, 400);
-    }
+    if (pulando) return;
+    pulando = true;
+    deslocY = -150;
+    aplicarTransform();
+    setTimeout(() => {
+        deslocY = 0;
+        aplicarTransform();
+        pulando = false;
+    }, 400);
 }
 
-// Resetar inatividade
+// Inatividade: mostra mensagem e faz um pulo após 10s
+let timeoutInatividade;
+function mostrarMensagem() {
+    mensagem.classList.add('show');
+}
+function esconderMensagem() {
+    mensagem.classList.remove('show');
+}
 function resetarInatividade() {
     clearTimeout(timeoutInatividade);
-    mensagem.style.display = "none"; // esconde mensagem se usuário interagir
+    esconderMensagem();
     timeoutInatividade = setTimeout(() => {
         pular();
-        mensagem.style.display = "block"; // mostra mensagem após 10s sem interação
+        mostrarMensagem();
     }, 10000); // 10 segundos
 }
 
-// Eventos de interação
-carinha.addEventListener('click', () => { piscar(); pular(); resetarInatividade(); });
-carinha.addEventListener('touchstart', () => { piscar(); pular(); resetarInatividade(); });
+// Eventos de interação (reiniciam inatividade)
+function interagir() {
+    piscar();
+    pular();
+    resetarInatividade();
+}
+carinha.addEventListener('click', interagir);
+carinha.addEventListener('touchstart', interagir, { passive: true });
 document.addEventListener('keydown', (e) => {
     if (e.code === 'Space' || e.code === 'Enter') {
         e.preventDefault();
-        piscar();
-        pular();
+        interagir();
+    } else {
         resetarInatividade();
     }
 });
+// Considera movimento do mouse e toque como atividade
+document.addEventListener('mousemove', resetarInatividade);
+document.addEventListener('touchmove', resetarInatividade, { passive: true });
 
-// Inicia contador de inatividade
-resetarInatividade();
-</script>
-</body>
-</html>
+// Inicializa
+aplicarTransform
